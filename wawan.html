@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Dzakwan</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #00a8ff;
+            --secondary: #0097e6;
+            --dark: #2f3640;
+            --light: #f5f6fa;
+            --accent: #e84118;
+            --tni-green: #2c5e1a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+        
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            width: 80px;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .sidebar:hover {
+            width: 250px;
+        }
+        
+        .sidebar:hover .menu-item span {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .menu {
+            list-style: none;
+            width: 100%;
+            padding: 0 20px;
+        }
+        
+        .menu-item {
+            margin: 30px 0;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--primary);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+            transform-origin: bottom;
+        }
+        
+        .menu-item:hover::before {
+            transform: scaleY(1);
+        }
+        
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .menu-item i {
+            font-size: 1.5rem;
+            color: var(--light);
+            margin-right: 15px;
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        .menu-item span {
+            font-size: 1rem;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .menu-item.active {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .menu-item.active::before {
+            transform: scaleY(1);
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: 80px;
+            transition: margin-left 0.5s ease;
+            position: relative;
+        }
+        
+        .page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            padding: 50px;
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .page.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        /* Home Page */
+        .home-page {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        .profile-container {
+            position: relative;
+            width: 350px;
+            height: 350px;
+        }
+        
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 10px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .achievement-badge {
+            position: absolute;
+            background: var(--accent);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            animation: pulse 2s infinite;
+        }
+        
+        .badge-1 {
+            top: 20px;
+            right: 0;
+            transform: rotate(15deg);
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1) rotate(15deg);
+            }
+            50% {
+                transform: scale(1.05) rotate(15deg);
+            }
+            100% {
+                transform: scale(1) rotate(15deg);
+            }
+        }
+        
+        .intro-text {
+            max-width: 600px;
+        }
+        
+        .intro-text h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+        
+        .intro-text h2 {
+            font-size: 1.8rem;
+            font-weight: 400;
+            margin-bottom: 30px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .intro-text p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .social-icons a {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--light);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            background: var(--primary);
+            transform: translateY(-5px);
+        }
+        
+        /* About Page */
+        .about-page h1, .hobbies-page h1, .goals-page h1 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .about-page h1::after, .hobbies-page h1::after, .goals-page h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), transparent);
+            border-radius: 2px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .info-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .info-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .info-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .info-card p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        /* Hobbies Page */
+        .skill-bar {
+            margin-bottom: 25px;
+        }
+        
+        .skill-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .skill-name {
+            font-size: 1.1rem;
+        }
+        
+        .skill-percent {
+            font-size: 1rem;
+            color: var(--primary);
+        }
+        
+        .bar {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 5px;
+            position: relative;
+            transition: width 1.5s ease;
+        }
+        
+        /* Goals Page */
+        .goals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .goal-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        
+        .goal-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .rank-icon {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .rank-stripe {
+            width: 80px;
+            height: 15px;
+            background-color: var(--tni-green);
+            margin: 2px 0;
+            position: relative;
+        }
+        
+        .rank-stripe::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: gold;
+            transform: translateY(-50%);
+        }
+        
+        .rank-star {
+            position: absolute;
+            color: gold;
+            font-size: 1.5rem;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+        }
+        
+        .goal-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--tni-green);
+        }
+        
+        .goal-card p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.8);
+            text-align: left;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .home-page {
+                justify-content: center;
+                text-align: center;
+            }
+            
+            .intro-text {
+                margin-top: 50px;
+            }
+            
+            .social-icons {
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 60px;
+            }
+            
+            .sidebar:hover {
+                width: 200px;
+            }
+            
+            .main-content {
+                margin-left: 60px;
+            }
+            
+            .page {
+                padding: 30px;
+            }
+            
+            .profile-container {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .intro-text h1 {
+                font-size: 2.5rem;
+            }
+            
+            .intro-text h2 {
+                font-size: 1.5rem;
+            }
+            
+            .achievement-badge {
+                font-size: 0.8rem;
+                padding: 5px 10px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .sidebar {
+                width: 100%;
+                height: 60px;
+                bottom: 0;
+                top: auto;
+                flex-direction: row;
+                justify-content: space-around;
+            }
+            
+            .sidebar:hover {
+                width: 100%;
+            }
+            
+            .menu {
+                display: flex;
+                justify-content: space-around;
+                padding: 0;
+            }
+            
+            .menu-item {
+                margin: 0;
+                padding: 10px;
+            }
+            
+            .menu-item span {
+                display: none;
+            }
+            
+            .sidebar:hover .menu-item span {
+                display: none;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                margin-bottom: 60px;
+            }
+            
+            .profile-container {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .intro-text h1 {
+                font-size: 2rem;
+            }
+            
+            .intro-text h2 {
+                font-size: 1.2rem;
+            }
+            
+            .info-grid, .goals-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .rank-icon {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .rank-stripe {
+                width: 60px;
+                height: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <ul class="menu">
+                <li class="menu-item active" data-target="home">
+                    <i class="fas fa-home"></i>
+                    <span>Beranda</span>
+                </li>
+                <li class="menu-item" data-target="about">
+                    <i class="fas fa-user"></i>
+                    <span>Tentang Saya</span>
+                </li>
+                <li class="menu-item" data-target="hobbies">
+                    <i class="fas fa-heart"></i>
+                    <span>Hobi</span>
+                </li>
+                <li class="menu-item" data-target="goals">
+                    <i class="fas fa-star"></i>
+                    <span>Cita-Cita</span>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Home Page -->
+            <div class="page active" id="home">
+                <div class="home-page">
+                    <div class="profile-container">
+                        <img src="wawan.jpg" alt="Foto Profil Dzakwan" class="profile-image">
+                        <div class="achievement-badge badge-1">CUTE</div>
+                    </div>
+                    <div class="intro-text">
+                        <h1>Halo, Saya Dzakwan</h1>
+                        <h2>Seorang Pelajar</h2>
+                        <p>Selamat datang di portfolio pribadi saya. Saya bersemangat dalam mempelajari hal-hal baru dan terus mengembangkan diri. Ruang ini menampilkan perjalanan, minat, dan aspirasi saya.</p>
+                        <div class="social-icons">
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- About Page -->
+            <div class="page" id="about">
+                <div class="about-page">
+                    <h1>Tentang Saya</h1>
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <h3>Informasi Pribadi</h3>
+                            <p><strong>Nama:</strong> Dzakwan</p>
+                            <p><strong>Umur:</strong> 18 tahun</p>
+                            <p><strong>Pendidikan:</strong> SMK N 2 KARANGANYAR</p>
+                            <p><strong>Alamat:</strong> Perum Sari Arum Tegal Gede Karanganyar 04/08</p>
+                        </div>
+                        <div class="info-card">
+                            <h3>Latar Belakang</h3>
+                            <p>Aku adalah seorang pelajar SMK yang bercita-cita menjadi abdi negara. Setiap hari, aku berusaha keras mempelajari ilmu pengetahuan dan keterampilan, baik di sekolah maupun di luar kelas. Aku yakin, dengan disiplin, kerja keras, dan semangat pantang menyerah, aku bisa mewujudkan mimpiku untuk mengabdi pada bangsa dan negara.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Hobbies Page -->
+            <div class="page" id="hobbies">
+                <div class="hobbies-page">
+                    <h1>Hobi Saya</h1>
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <h3>Hobi & Minat</h3>
+                            <div class="skill-bar">
+                                <div class="skill-info">
+                                    <span class="skill-name">Binsik</span>
+                                    <span class="skill-percent">95%</span>
+                                </div>
+                                <div class="bar">
+                                    <div class="progress" style="width: 95%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-info">
+                                    <span class="skill-name">Nonton Film</span>
+                                    <span class="skill-percent">85%</span>
+                                </div>
+                                <div class="bar">
+                                    <div class="progress" style="width: 85%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-info">
+                                    <span class="skill-name">Dengar Musik</span>
+                                    <span class="skill-percent">82%</span>
+                                </div>
+                                <div class="bar">
+                                    <div class="progress" style="width: 82%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Goals Page -->
+            <div class="page" id="goals">
+                <div class="goals-page">
+                    <h1>Cita-Cita Saya</h1>
+                    <div class="goals-grid">
+                        <div class="goal-card">
+                            <div class="rank-icon">
+                                <div class="rank-stripe"></div>
+                                <div class="rank-stripe"></div>
+                                <div class="rank-stripe"></div>
+                                <i class="fas fa-star rank-star"></i>
+                            </div>
+                            <h3>TNI AD </h3>
+                            <p>Sebagai pelajar SMK, aku bercita-cita untuk menjadi anggota TNI AD . Aku ingin mengabdi kepada negara, menjaga kedaulatan NKRI, dan menjadi sosok yang disiplin, tangguh, serta bertanggung jawab. Aku akan terus berusaha keras dengan belajar tekun, menjaga kesehatan, dan melatih fisik serta mental agar siap menghadapi seleksi. Semoga kelak aku bisa mengenakan seragam hijau dengan pangkat Sersan Mayor dan membanggakan keluarga serta bangsa!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuItems = document.querySelectorAll('.menu-item');
+            const pages = document.querySelectorAll('.page');
+            
+            // Initialize skill bars animation
+            animateSkillBars();
+            
+            // Menu item click event
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const target = this.getAttribute('data-target');
+                    
+                    // Remove active class from all menu items
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    
+                    // Add active class to clicked menu item
+                    this.classList.add('active');
+                    
+                    // Hide all pages
+                    pages.forEach(page => {
+                        page.classList.remove('active');
+                    });
+                    
+                    // Show target page
+                    document.getElementById(target).classList.add('active');
+                    
+                    // Re-animate skill bars when hobbies page is shown
+                    if (target === 'hobbies') {
+                        animateSkillBars();
+                    }
+                });
+            });
+            
+            // Animate skill bars function
+            function animateSkillBars() {
+                const skillBars = document.querySelectorAll('.progress');
+                skillBars.forEach(bar => {
+                    const width = bar.style.width;
+                    bar.style.width = '0';
+                    setTimeout(() => {
+                        bar.style.width = width;
+                    }, 100);
+                });
+            }
+            
+            // Floating animation for profile image
+            const profileImage = document.querySelector('.profile-image');
+            if (profileImage) {
+                profileImage.style.animation = 'float 6s ease-in-out infinite';
+            }
+        });
+    </script>
+</body>
+</html>
